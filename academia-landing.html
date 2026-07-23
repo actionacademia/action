@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORJA — Academia</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,700;0,900;1,900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --fire: #FF4C1C; --ember: #FF8A4C; --iron: #1A1A1A; --steel: #2D2D2D;
+    --ash: #999; --light: #F5F0E8; --white: #FFFFFF;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--iron); color: var(--light); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(26,26,26,0.88); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,76,28,0.2);
+    animation: slideDown 0.8s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: 0.08em; color: var(--fire); text-decoration: none; }
+  .logo span { color: var(--light); }
+  nav ul { display: flex; gap: 2.5rem; list-style: none; }
+  nav ul a { color: var(--ash); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
+  nav ul a:hover { color: var(--fire); }
+  .nav-cta { background: var(--fire); color: var(--white); border: none; padding: 0.6rem 1.5rem; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); transition: background 0.3s; }
+  .nav-cta:hover { background: var(--ember); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 3rem 4rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 70% 50%, rgba(255,76,28,0.1) 0%, transparent 70%); pointer-events: none; }
+  .hero-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,76,28,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,76,28,0.05) 1px, transparent 1px); background-size: 60px 60px; animation: gridPulse 4s ease-in-out infinite alternate; }
+  @keyframes gridPulse { from { opacity: 0.5; } to { opacity: 1; } }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,76,28,0.12); border: 1px solid rgba(255,76,28,0.4); color: var(--fire); padding: 0.4rem 1rem; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2rem; animation: fadeUp 0.8s 0.3s cubic-bezier(.16,1,.3,1) both; }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--fire); border-radius: 50%; animation: dotBlink 1.5s ease-in-out infinite; }
+  @keyframes dotBlink { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.6); } }
+  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(5rem, 9vw, 9rem); line-height: 0.9; text-transform: uppercase; animation: fadeUp 0.8s 0.5s cubic-bezier(.16,1,.3,1) both; }
+  .hero h1 em { font-style: italic; -webkit-text-stroke: 2px var(--fire); color: transparent; display: block; }
+  .hero-sub { margin-top: 1.5rem; max-width: 38ch; color: var(--ash); font-size: 1rem; line-height: 1.7; animation: fadeUp 0.8s 0.7s cubic-bezier(.16,1,.3,1) both; }
+  .hero-actions { display: flex; align-items: center; gap: 1.5rem; margin-top: 2.5rem; animation: fadeUp 0.8s 0.9s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .btn-primary { background: var(--fire); color: var(--white); border: none; padding: 1rem 2.5rem; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%); transition: all 0.3s; position: relative; overflow: hidden; }
+  .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%); transform: translateX(-100%); transition: transform 0.5s; }
+  .btn-primary:hover::after { transform: translateX(100%); }
+  .btn-primary:hover { background: var(--ember); }
+  .btn-ghost { background: transparent; color: var(--light); border: 1px solid rgba(245,240,232,0.3); padding: 1rem 2rem; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+  .btn-ghost:hover { border-color: var(--fire); color: var(--fire); }
+
+  /* Hero right */
+  .hero-stats { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 1.5rem; padding-left: 4rem; animation: fadeLeft 1s 1s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes fadeLeft { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .stat-card { background: var(--steel); border: 1px solid rgba(255,76,28,0.2); padding: 1.5rem 2rem; position: relative; overflow: hidden; transition: border-color 0.3s; }
+  .stat-card:hover { border-color: rgba(255,76,28,0.5); }
+  .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--fire); }
+  .stat-number { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 3rem; color: var(--fire); line-height: 1; }
+  .stat-label { color: var(--ash); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+
+  /* Decoration rings */
+  .hero-deco { position: absolute; right: 4%; top: 15%; width: 400px; height: 400px; pointer-events: none; z-index: 1; }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(255,76,28,0.25); animation: spin linear infinite; }
+  .ring-1 { width: 400px; height: 400px; top: 0; left: 0; animation-duration: 25s; }
+  .ring-2 { width: 280px; height: 280px; top: 60px; left: 60px; border-width: 2px; border-color: rgba(255,76,28,0.4); animation-duration: 18s; animation-direction: reverse; }
+  .ring-3 { width: 160px; height: 160px; top: 120px; left: 120px; border-width: 3px; border-color: rgba(255,76,28,0.6); animation-duration: 12s; }
+  .ring-core { position: absolute; top: 175px; left: 175px; width: 50px; height: 50px; border-radius: 50%; background: var(--fire); opacity: 0.25; animation: coreGlow 2s ease-in-out infinite; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes coreGlow { 0%,100% { transform: scale(1); opacity: 0.25; } 50% { transform: scale(1.5); opacity: 0.5; } }
+
+  /* MARQUEE */
+  .marquee-wrap { overflow: hidden; padding: 1.4rem 0; border-top: 1px solid rgba(255,76,28,0.2); border-bottom: 1px solid rgba(255,76,28,0.2); background: var(--fire); }
+  .marquee-inner { display: flex; white-space: nowrap; animation: marqueeLeft 22s linear infinite; }
+  @keyframes marqueeLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; padding: 0 2rem; }
+  .marquee-sep { color: rgba(255,255,255,0.4); padding: 0 0.5rem; }
+
+  /* CAROUSEL SECTION */
+  .carousel-section { padding: 6rem 0; overflow: hidden; }
+  .section-label { text-align: center; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); text-align: center; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 3rem; }
+
+  .carousel-fade { position: relative; }
+  .carousel-fade::before, .carousel-fade::after { content: ''; position: absolute; top: 0; bottom: 0; width: 130px; z-index: 2; pointer-events: none; }
+  .carousel-fade::before { left: 0; background: linear-gradient(to right, var(--iron), transparent); }
+  .carousel-fade::after  { right: 0; background: linear-gradient(to left, var(--iron), transparent); }
+
+  .track-wrapper { overflow: hidden; margin-bottom: 1.5rem; }
+  .track { display: flex; gap: 1.5rem; width: max-content; animation: trackLeft 32s linear infinite; }
+  .track:hover { animation-play-state: paused; }
+  .track-r { display: flex; gap: 1.5rem; width: max-content; animation: trackRight 38s linear infinite; }
+  .track-r:hover { animation-play-state: paused; }
+  @keyframes trackLeft  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes trackRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+  .c-card { flex-shrink: 0; width: 320px; height: 210px; position: relative; overflow: hidden; border: 1px solid rgba(255,76,28,0.2); cursor: pointer; transition: border-color 0.3s; }
+  .c-card:hover { border-color: var(--fire); }
+  .c-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(.16,1,.3,1); filter: brightness(0.65) saturate(0.7); }
+  .c-card:hover img { transform: scale(1.08); filter: brightness(0.8) saturate(1); }
+  .c-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,26,26,0.9) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 1.2rem; }
+  .c-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* PROGRAMS */
+  .programs-section { padding: 6rem 3rem; }
+  .programs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,76,28,0.12); margin-top: 3rem; }
+  .prog-card { background: var(--iron); padding: 3rem 2.5rem; position: relative; overflow: hidden; transition: background 0.4s; }
+  .prog-card:hover { background: var(--steel); }
+  .prog-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 0; background: var(--fire); transition: height 0.4s cubic-bezier(.16,1,.3,1); }
+  .prog-card:hover::after { height: 3px; }
+  .prog-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 4rem; color: rgba(255,76,28,0.12); line-height: 1; margin-bottom: 1rem; transition: color 0.4s; }
+  .prog-card:hover .prog-num { color: rgba(255,76,28,0.3); }
+  .prog-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; transition: color 0.3s; }
+  .prog-card:hover .prog-name { color: var(--fire); }
+  .prog-desc { color: var(--ash); font-size: 0.9rem; line-height: 1.7; }
+
+  /* TIMELINE */
+  .timeline-section { padding: 6rem 3rem; background: var(--steel); position: relative; overflow: hidden; }
+  .timeline-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--fire), transparent); }
+  .tl-wrap { display: flex; flex-direction: column; gap: 0; margin-top: 4rem; position: relative; }
+  .tl-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,76,28,0.25); transform: translateX(-50%); }
+  .tl-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: var(--fire); transform-origin: top; animation: fillUp 5s ease-in-out infinite alternate; }
+  @keyframes fillUp { from { transform: scaleY(0.05); } to { transform: scaleY(1); } }
+  .tl-item { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; padding: 2rem 0; }
+  .tl-box { background: var(--iron); border: 1px solid rgba(255,76,28,0.2); padding: 1.5rem 2rem; transition: border-color 0.3s, transform 0.3s; }
+  .tl-box:hover { border-color: var(--fire); transform: scale(1.02); }
+  .tl-item:nth-child(odd)  .tl-box { margin-right: 2rem; }
+  .tl-item:nth-child(even) .tl-box { margin-left: 2rem; grid-column: 3; }
+  .tl-item:nth-child(even) .tl-dot-col { grid-column: 2; grid-row: 1; }
+  .tl-dot-col { display: flex; align-items: center; justify-content: center; z-index: 2; }
+  .tl-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--fire); border: 3px solid var(--steel); box-shadow: 0 0 0 5px rgba(255,76,28,0.25); animation: dotPulse 2s ease-in-out infinite; }
+  @keyframes dotPulse { 0%,100% { box-shadow: 0 0 0 5px rgba(255,76,28,0.25); } 50% { box-shadow: 0 0 0 12px rgba(255,76,28,0); } }
+  .tl-time { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fire); margin-bottom: 0.4rem; }
+  .tl-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .tl-desc { color: var(--ash); font-size: 0.85rem; line-height: 1.6; }
+
+  /* animation-timeline scroll (modern browsers) */
+  @supports (animation-timeline: scroll()) {
+    .prog-card { view-timeline-name: --card; animation: scrollReveal linear both; animation-timeline: view(); animation-range: entry 0% entry 30%; }
+    .tl-item   { animation: scrollReveal linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+    @keyframes scrollReveal { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  }
+
+  /* DEPOIMENTOS */
+  .testimonials-section { padding: 6rem 3rem; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .testi-card { background: var(--steel); border: 1px solid rgba(255,76,28,0.15); padding: 2rem; transition: border-color 0.3s; }
+  .testi-card:hover { border-color: rgba(255,76,28,0.45); }
+  .stars { color: var(--fire); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+  .quote-mark { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 4rem; color: rgba(255,76,28,0.35); line-height: 0.8; margin-bottom: 0.8rem; }
+  .testi-text { color: var(--light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .testi-author { display: flex; align-items: center; gap: 1rem; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--fire); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.1rem; flex-shrink: 0; }
+  .author-name { font-weight: 700; font-size: 0.9rem; }
+  .author-info { color: var(--ash); font-size: 0.78rem; margin-top: 0.15rem; }
+
+  /* CTA */
+  .cta-section { padding: 8rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,76,28,0.1) 0%, transparent 70%); pointer-events: none; }
+  .cta-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem, 8vw, 7rem); text-transform: uppercase; line-height: 0.9; position: relative; }
+  .cta-title em { font-style: italic; -webkit-text-stroke: 2px var(--fire); color: transparent; }
+  .cta-sub { color: var(--ash); font-size: 1.1rem; margin: 1.5rem auto 1.5rem; max-width: 50ch; line-height: 1.7; position: relative; }
+  .price-pill { display: inline-flex; align-items: baseline; gap: 0.3rem; background: rgba(255,76,28,0.1); border: 1px solid rgba(255,76,28,0.3); padding: 0.5rem 1.5rem; margin-bottom: 2.5rem; position: relative; }
+  .price-big { font-family: 'Barlow Condensed', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--fire); }
+  .price-period { color: var(--ash); font-size: 0.85rem; }
+  .cta-actions { display: flex; justify-content: center; gap: 1rem; position: relative; }
+
+  /* FOOTER */
+  footer { background: #0f0f0f; border-top: 1px solid rgba(255,76,28,0.15); padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--fire); }
+  .footer-copy { color: var(--ash); font-size: 0.8rem; }
+  .footer-socials { display: flex; gap: 0.75rem; }
+  .soc { width: 36px; height: 36px; border: 1px solid rgba(255,76,28,0.3); display: flex; align-items: center; justify-content: center; color: var(--ash); font-size: 0.72rem; text-decoration: none; transition: all 0.3s; }
+  .soc:hover { border-color: var(--fire); color: var(--fire); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">ACTION <span>ACADEMIA</span></a>
+  <ul>
+    <li><a href="#programas">Programas</a></li>
+    <li><a href="#horarios">Horários</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="#planos">Planos</a></li>
+  </ul>
+  <button class="nav-cta">Comece Agora</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Academia Premium · Desde 1995</div>
+    <h1>Forje<br><em>seu limite</em></h1>
+    <p class="hero-sub">Treinamento de alto desempenho para quem não aceita mediocridade. Equipamentos de ponta, instrutores de elite e resultados reais.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Diaria R$10,00</button>
+      <button class="btn-ghost">Ver Planos</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">2.400+</div><div class="stat-label">Alunos Ativos</div></div>
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">Satisfação</div></div>
+    <div class="stat-card"><div class="stat-number">15</div><div class="stat-label">Anos de Excelência</div></div>
+  </div>
+  <div class="hero-deco">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="ring-core"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="marquee-item">Musculação</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">CrossFit</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Spinning</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Boxe</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Pilates</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Yoga</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Funcional</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Natação</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Musculação</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">CrossFit</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Spinning</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Boxe</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Pilates</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Yoga</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Funcional</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Natação</span><span class="marquee-sep">◆</span>
+  </div>
+</div>
+
+<!-- CARROSSEL -->
+<section class="carousel-section">
+  <p class="section-label">Estrutura</p>
+  <h2 class="section-title">Nossa Academia</h2>
+  <div class="carousel-fade">
+    <div class="track-wrapper">
+      <div class="track">
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=640&q=80" alt="Musculação"><div class="c-overlay"><span class="c-label">Musculação</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=640&q=80" alt="CrossFit"><div class="c-overlay"><span class="c-label">CrossFit</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=640&q=80" alt="Yoga"><div class="c-overlay"><span class="c-label">Yoga & Pilates</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=640&q=80" alt="Spinning"><div class="c-overlay"><span class="c-label">Spinning</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=640&q=80" alt="Funcional"><div class="c-overlay"><span class="c-label">Funcional</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=640&q=80" alt="Boxe"><div class="c-overlay"><span class="c-label">Boxe</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=640&q=80" alt="Musculação"><div class="c-overlay"><span class="c-label">Musculação</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=640&q=80" alt="CrossFit"><div class="c-overlay"><span class="c-label">CrossFit</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=640&q=80" alt="Yoga"><div class="c-overlay"><span class="c-label">Yoga & Pilates</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=640&q=80" alt="Spinning"><div class="c-overlay"><span class="c-label">Spinning</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=640&q=80" alt="Funcional"><div class="c-overlay"><span class="c-label">Funcional</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=640&q=80" alt="Boxe"><div class="c-overlay"><span class="c-label">Boxe</span></div></div>
+      </div>
+    </div>
+    <div class="track-wrapper">
+      <div class="track-r">
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=640&q=80" alt="Vestiários"><div class="c-overlay"><span class="c-label">Vestiários Premium</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=640&q=80" alt="Cardio"><div class="c-overlay"><span class="c-label">Cardio Zone</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=640&q=80" alt="Treino"><div class="c-overlay"><span class="c-label">Treino Livre</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=640&q=80" alt="Nutrição"><div class="c-overlay"><span class="c-label">Consultoria</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?w=640&q=80" alt="VIP"><div class="c-overlay"><span class="c-label">Sala VIP</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=640&q=80" alt="Personal"><div class="c-overlay"><span class="c-label">Personal Trainer</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=640&q=80" alt="Vestiários"><div class="c-overlay"><span class="c-label">Vestiários Premium</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=640&q=80" alt="Cardio"><div class="c-overlay"><span class="c-label">Cardio Zone</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=640&q=80" alt="Treino"><div class="c-overlay"><span class="c-label">Treino Livre</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=640&q=80" alt="Nutrição"><div class="c-overlay"><span class="c-label">Consultoria</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?w=640&q=80" alt="VIP"><div class="c-overlay"><span class="c-label">Sala VIP</span></div></div>
+        <div class="c-card"><img src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=640&q=80" alt="Personal"><div class="c-overlay"><span class="c-label">Personal Trainer</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMAS -->
+<section class="programs-section" id="programas">
+  <p class="section-label">Modalidades</p>
+  <h2 class="section-title">Escolha Seu Caminho</h2>
+  <div class="programs-grid">
+    <div class="prog-card"><div class="prog-num">01</div><div class="prog-name">Musculação</div><p class="prog-desc">Equipamentos de última geração e periodização científica para resultados reais. Hipertrofia, força ou resistência — você decide.</p></div>
+    <div class="prog-card"><div class="prog-num">02</div><div class="prog-name">CrossFit</div><p class="prog-desc">WODs intensos com comunidade que impulsiona seu desempenho. Funcional, explosivo e viciante.</p></div>
+    <div class="prog-card"><div class="prog-num">03</div><div class="prog-name">Boxe & MMA</div><p class="prog-desc">Treinamento marcial completo. Defesa pessoal, condicionamento e disciplina mental em um único programa.</p></div>
+    <div class="prog-card"><div class="prog-num">04</div><div class="prog-name">Spinning</div><p class="prog-desc">Aulas em grupo de alta intensidade com música ao vivo. Cardio que você vai querer fazer todo dia.</p></div>
+    <div class="prog-card"><div class="prog-num">05</div><div class="prog-name">Yoga & Pilates</div><p class="prog-desc">Flexibilidade, equilíbrio e consciência corporal. Complemento perfeito para qualquer modalidade de treino.</p></div>
+    <div class="prog-card"><div class="prog-num">06</div><div class="prog-name">Personal</div><p class="prog-desc">Treino 100% personalizado com análise biomecânica e planejamento nutricional integrado. Resultados acelerados.</p></div>
+  </div>
+</section>
+
+<!-- TIMELINE HORÁRIOS -->
+<section class="timeline-section" id="horarios">
+  <p class="section-label">Grade Semanal</p>
+  <h2 class="section-title" style="text-align:center">Horários em Destaque</h2>
+  <div class="tl-wrap">
+    <div class="tl-line"><div class="tl-fill"></div></div>
+    <div class="tl-item">
+      <div class="tl-box"><div class="tl-time">Segunda — 06h00</div><div class="tl-title">Boot Camp Matinal</div><p class="tl-desc">Circuito funcional de alta intensidade para começar a semana no limite. Vagas limitadas.</p></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div></div>
+    </div>
+    <div class="tl-item">
+      <div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-box"><div class="tl-time">Terça — 07h30</div><div class="tl-title">Yoga Flow</div><p class="tl-desc">Prática dinâmica que une mobilidade e força. Ideal para recuperação ativa e foco mental.</p></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-box"><div class="tl-time">Quarta — 12h00</div><div class="tl-title">CrossFit WOD</div><p class="tl-desc">Workout of the day com carga progressiva. Comunidade intensa, resultado garantido.</p></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div></div>
+    </div>
+    <div class="tl-item">
+      <div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-box"><div class="tl-time">Quinta — 19h00</div><div class="tl-title">Spinning Noturno</div><p class="tl-desc">Sessão de spinning com playlist ao vivo. 45 minutos que vão mudar sua noite.</p></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-box"><div class="tl-time">Sábado — 09h00</div><div class="tl-title">Treino Coletivo</div><p class="tl-desc">Aula aberta para todos os alunos. Socialização, diversão e muito suor no fim de semana.</p></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="testimonials-section" id="depoimentos">
+  <p class="section-label">Comunidade</p>
+  <h2 class="section-title">Quem Forjou Resultados</h2>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="stars">★★★★★</div><div class="quote-mark">"</div><p class="testi-text">Em 6 meses perdi 18kg e ganhei uma confiança que nunca tive. Os instrutores são incríveis — profissionais de verdade.</p><div class="testi-author"><div class="avatar">RM</div><div><div class="author-name">Rafael Mendonça</div><div class="author-info">Aluno há 2 anos</div></div></div></div>
+    <div class="testi-card"><div class="stars">★★★★★</div><div class="quote-mark">"</div><p class="testi-text">A estrutura é absurda. Melhor academia que já frequentei em toda minha vida. O CrossFit aqui tem outro nível.</p><div class="testi-author"><div class="avatar">CA</div><div><div class="author-name">Camila Araujo</div><div class="author-info">Aluna há 3 anos</div></div></div></div>
+    <div class="testi-card"><div class="stars">★★★★★</div><div class="quote-mark">"</div><p class="testi-text">Treinei em muitos lugares, mas a FORJA tem um ambiente único. A equipe te puxa pra cima todo dia.</p><div class="testi-author"><div class="avatar">TP</div><div><div class="author-name">Thiago Prado</div><div class="author-info">Aluno há 1 ano</div></div></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="planos">
+  <h2 class="cta-title">Pronto para<br><em>começar?</em></h2>
+  <p class="cta-sub">Sua primeira semana é por nossa conta. Sem compromisso, sem burocracia — só treino.</p>
+  <div class="price-pill"><span class="price-big">R$89</span><span class="price-period">/mês · Plano Mensal</span></div>
+  <div class="cta-actions">
+    <button class="btn-primary" style="font-size:1rem;padding:1.2rem 3rem">Garantir Minha Vaga</button>
+    <button class="btn-ghost" style="font-size:1rem;padding:1.2rem 2rem">Ver Todos os Planos</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">FORJA</div>
+  <div class="footer-copy">© 2026 FORJA Academia. Todos os direitos reservados.</div>
+  <div class="footer-socials">
+    <a href="#" class="soc" aria-label="Instagram">IG</a>
+    <a href="#" class="soc" aria-label="Facebook">FB</a>
+    <a href="#" class="soc" aria-label="YouTube">YT</a>
+  </div>
+</footer>
+
+</body>
+</html>
